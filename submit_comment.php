@@ -9,16 +9,28 @@ if (!$conn) {
 
 // Process form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = $_POST["name"];
-    $comment = $_POST["comment"];
+    // Prepare SQL statement
+    $sql = "INSERT INTO comments (name, comment) VALUES (?, ?)";
+    
+    // Prepare the SQL statement
+    if ($stmt = mysqli_prepare($conn, $sql)) {
+        // Bind parameters
+        mysqli_stmt_bind_param($stmt, "ss", $name, $comment);
 
-    // Insert comment into database
-    $sql = "INSERT INTO comments (name, comment) VALUES ('$name', '$comment')";
-    if (mysqli_query($conn, $sql)) {
-        header("Location: index.php"); // Redirect back to the main page after submission
-        exit();
+        // Set parameters and execute the statement
+        $name = $_POST["name"];
+        $comment = $_POST["comment"];
+        if (mysqli_stmt_execute($stmt)) {
+            header("Location: index.php"); // Redirect back to the main page after submission
+            exit();
+        } else {
+            echo "Error: Unable to execute statement.";
+        }
+
+        // Close statement
+        mysqli_stmt_close($stmt);
     } else {
-        echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+        echo "Error: Unable to prepare statement.";
     }
 }
 

@@ -12,10 +12,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['comment_id']) && isset
         die("Connection failed: " . mysqli_connect_error());
     }
 
-    // Update comment in the database
+    // Prepare SQL statement
     $sql = "UPDATE comments SET comment = ? WHERE id = ?";
     $stmt = mysqli_prepare($conn, $sql);
+    
+    // Bind parameters
     mysqli_stmt_bind_param($stmt, "si", $updatedComment, $commentId);
+    
+    // Execute the statement
     if (mysqli_stmt_execute($stmt)) {
         // Redirect back to the main page after update
         header("Location: index.php");
