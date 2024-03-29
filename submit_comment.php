@@ -1,6 +1,6 @@
 <?php
 // Connect to MySQL database
-$conn = mysqli_connect("localhost", "root", "", "hons");
+$conn = mysqli_connect("localhost", "root", "p]*(q/7QfB.LmlOY", "hons");
 
 // Check connection
 if (!$conn) {
